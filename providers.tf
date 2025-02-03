@@ -1,20 +1,35 @@
-###########################################
-############# AWS Provider ################
-###########################################
-
+######################################################################
+# Provider AWS
+######################################################################
 provider "aws" {
-  alias   = "pra_idp_dev"                                        #Write alias manually
   region  = var.aws_region
-  profile = var.profile                                          #Write profile manually (on demand)
+  profile = var.profile
 
-  # assume_role {
-  #   role_arn = "arn:aws:iam::ACCOUNT_NUMBER:role/ROLE_NAME"      #Write account number and role name manually (on demand)
-  # }
-  
   default_tags {
     tags = var.common_tags
   }
 }
+
+provider "aws" {
+  alias   = "pra_idp_dev"
+  region  = var.aws_region
+  profile = var.profile
+
+  default_tags {
+    tags = var.common_tags
+  }
+}
+
+provider "aws" {
+  alias   = "pra_idp_dev_2"
+  region  = "us-east-2"  # Cambia a la región necesaria
+  profile = var.profile
+
+  default_tags {
+    tags = var.common_tags
+  }
+}
+
 
 ###########################################
 #Version definition - Terraform - Providers
