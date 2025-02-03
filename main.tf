@@ -1,23 +1,24 @@
-################################################################
-# Module VPC Security Groups
-################################################################
+###########################################
+######### Security Group Module ###########
+###########################################
 
 module "security_groups" {
+  #Before using the module, once you have the new location of your repo, you need to change the source value.
   source = "git::https://github.com/somospragma/cloudops-ref-repo-aws-sg-terraform.git?ref=feature/sg-module-init"
 
   providers = {
     aws.project = aws.pra_idp_dev
   }
 
+  environment = var.environment
   client      = var.client
   project     = var.project
-  environment = var.environment
 
   sg_config = [
     {
       application   = var.application
       service       = var.service
-      functionality = var.functionality #
+      functionality = var.functionality
       description   = "Security group for RDS Aurora"
       vpc_id        = data.aws_vpc.vpc.id
 
@@ -48,21 +49,22 @@ module "security_groups" {
   ]
 }
 
+###########################################
+############### KMS Module ################
+###########################################
 
-################################################################
-# Module KMS
-################################################################
 module "kms" {
-  
+  #Before using the module, once you have the new location of your repo, you need to change the source value.
   source = "git::https://github.com/somospragma/cloudops-ref-repo-aws-kms-terraform.git?ref=feature/kms-module-init"
+  
   providers = {
     aws.project = aws.pra_idp_dev
   }
 
-  client      = var.client
-  service     = var.service
   environment = var.environment
+  client      = var.client
   project     = var.project
+  service     = var.service
 
   kms_config = [
     {
@@ -86,22 +88,23 @@ module "kms" {
   ]
 }
 
-################################################################
-# Module RDS
-################################################################
+###########################################
+############### KMS Module ################
+###########################################
 
 module "rds-aurora" {
+  #Before using the module, once you have the new location of your repo, you need to change the source value.
   source = "git::https://github.com/somospragma/cloudops-ref-repo-aws-rds-terraform.git?ref=feature/rds-module-init"
    
   providers = {
     aws.principal = aws.pra_idp_dev
     aws.secondary = aws.pra_idp_dev_2
   }
+
   environment = var.environment
   client      = var.client
-  service     = var.engine
   project     = var.project
-
+  service     = var.service
 
   rds_config = [
   {
@@ -119,18 +122,15 @@ module "rds-aurora" {
         manage_master_user_password     = var.manage_master_user_password                  
         master_password                 = var.master_password           
         master_username                 = var.master_username                
-        #vpc_security_group_ids          = [module.security_groups.sg_info["rds"].sg_id]
         vpc_security_group_ids          = [module.security_groups.sg_info[join("-", ["rds", var.application, var.functionality])].sg_id]
-        #vpc_security_group_ids          = []
         subnet_ids                      = [data.aws_subnet.database_subnet_1.id, data.aws_subnet.database_subnet_2.id]       
         backup_retention_period         = var.backup_retention_period                       
         skip_final_snapshot             = var.skip_final_snapshot                  
         preferred_backup_window         = var.preferred_backup_window         
         storage_encrypted               = var.storage_encrypted                  
         kms_key_id                      = module.kms.kms_info[0]["key_arn"]
-        #kms_key_id                      = var.kms_key_id
         port                            = var.port                  
-        service                         = var.service_database               
+        service                         = var.service               
         enabled_cloudwatch_logs_exports = []                      
         copy_tags_to_snapshot           = var.copy_tags_to_snapshot
         cluster_parameter = {
