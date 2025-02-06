@@ -1,4 +1,4 @@
-# **Módulo Terraform: cloudops-ref-repo-aws-transversal-terraform**
+# **Módulo Terraform: cloudops-ref-repo-aws-persistency-terraform**
 
 ## Descripción:
 
