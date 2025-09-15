@@ -95,6 +95,19 @@ module "vpc" {
 |------|---------|
 | <a name="provider_aws.project"></a> [aws.project](#provider\_aws) | >= 4.31.0 |
 
+## IAM Permissions
+
+Este repositorio requiere el siguiente rol IAM:
+- **Rol**: `TerraformPersistenceRole`
+- **Política**: `iam-policies/persistence-policy.json`
+
+### Permisos Incluidos
+- RDS: Gestión completa de clusters, instancias y snapshots
+- VPC: Acceso de lectura a VPCs, subredes y security groups
+- KMS: Acceso de lectura para cifrado
+- CloudWatch Logs: Gestión de grupos de logs
+- Terraform State: Acceso al backend S3 y DynamoDB
+
 ## References (PENDIENTE)
 
 | Module | Use | Resources | Varibales | Outputs |
